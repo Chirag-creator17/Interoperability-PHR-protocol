@@ -5,7 +5,7 @@ const HeaderComponent = () => {
   return (
     <Navbar className="navbar">
       <Container>
-          <div>Interoperability PHR protocol</div>
+          <div style={{fontSize:"20"}}>Interoperability PHR protocol</div>
         <Navbar.Toggle />
       </Container>
     </Navbar>

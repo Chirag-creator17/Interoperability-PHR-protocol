@@ -11,7 +11,7 @@ export const OtpInputComponent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(otp);
-    navigate("/");
+    navigate("/dashboard");
   };
   return (
     <Container className="login-container">
