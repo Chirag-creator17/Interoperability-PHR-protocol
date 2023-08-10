@@ -11,6 +11,7 @@ export const OtpInputComponent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(otp);
+    console.log(localStorage.getItem("role"));
     navigate("/dashboard");
   };
   return (

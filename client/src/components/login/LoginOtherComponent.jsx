@@ -1,16 +1,18 @@
 import React from "react";
 import { useState } from "react";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./styles.css";
-export const LoginComponent = () => {
+export const LoginOtherComponent = () => {
   const navigate = useNavigate();
-  const [number, setNumber] = useState("");
+    const [number, setNumber] = useState("");
+    const [role, setRole] = useState("");
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    localStorage.setItem("role", "user");
+      e.preventDefault();
+    console.log(number, role);
+    localStorage.setItem("role",role);
     navigate("/otp");
   };
   return (
@@ -30,27 +32,18 @@ export const LoginComponent = () => {
             Enter the mobile number registered with the AbhaId
           </Form.Text>
         </Form.Group>
+        <Form.Group className="mb-3 ctrl">
+          <Form.Label>Role</Form.Label>
+          <Form.Select aria-label="Default select example" value={role} onChange={(e) => setRole(e.target.value)}>
+            <option>Doctor</option>
+            <option>Hospital</option>
+            <option>Pharmacy</option>
+          </Form.Select>
+        </Form.Group>
         <Button variant="primary" type="submit" onClick={handleSubmit}>
           Submit
         </Button>
       </Form>
-      <div className="register">
-        * If you don't have Abha Id you can create it at{" "}
-        <a
-          href="https://healthid.ndhm.gov.in/register"
-          target="_blank"
-          rel="noreferrer"
-        >
-          https://healthid.ndhm.gov.in/register
-        </a>{" "}
-        .
-      </div>
-      <br />
-      <hr />
-      <br />
-      <div className="register">
-      <Link to="/loginOther">Click here</Link> for login for doctor or hospital
-      </div>
     </Container>
   );
 };

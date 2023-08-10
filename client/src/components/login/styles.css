@@ -13,6 +13,9 @@
 .login-container input{
     border-color: rgb(123, 121, 121);
 }
+.login-container select{
+    border-color: rgb(123, 121, 121);
+}
 .register{
     font-size: 16.5px;
     margin-top: 18px;
