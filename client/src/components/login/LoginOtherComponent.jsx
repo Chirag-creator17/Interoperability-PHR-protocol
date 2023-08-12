@@ -11,9 +11,8 @@ export const LoginOtherComponent = () => {
     const [role, setRole] = useState("");
   const handleSubmit = async (e) => {
       e.preventDefault();
-    console.log(number, role);
-    localStorage.setItem("role",role);
-    navigate("/otp");
+    // console.log(number, role);
+    navigate("/otp",{state:{number: number, role: role}});
   };
   return (
     <Container className="login-container">

@@ -10,8 +10,7 @@ export const LoginComponent = () => {
   const [number, setNumber] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    localStorage.setItem("role", "user");
-    navigate("/otp");
+    navigate("/otp", { state: { number: number, role: "user" } });
   };
   return (
     <Container className="login-container">

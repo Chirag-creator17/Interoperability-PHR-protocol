@@ -1,18 +1,23 @@
 import React from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation} from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./styles.css";
 export const OtpInputComponent = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { state } = location;
   const [otp, setOtp] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(otp);
-    console.log(localStorage.getItem("role"));
-    navigate("/dashboard");
+    console.log(state.number, state.role);
+    if(state.role === "user")
+      navigate("/dashboard");
+    else
+      navigate("/dashboardOther");
   };
   return (
     <Container className="login-container">
