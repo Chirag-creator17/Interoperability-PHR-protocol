@@ -17,10 +17,15 @@ const dummyData = {
     phrAddress: "string",
   },
 };
+function randonHealthId() {
+  const hid = Math.floor(Math.random() * 100000000).toString();
+  return hid;
+}
 const loginOtp = async (req, res) => {
   const { otp, role } = req.body;
     if (otp) {
-        dummyData.role = role;
+      dummyData.role = role;
+      dummyData.mobileLinkedHid.healthId= randonHealthId();
         if (role === "user") {
             return res.status(200).json(dummyData);
         }
