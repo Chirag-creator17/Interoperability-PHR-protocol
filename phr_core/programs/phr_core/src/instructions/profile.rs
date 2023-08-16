@@ -6,7 +6,6 @@ use crate::events::{ NewProfile, UpdateProfile };
 
 pub fn create_profile_handler(
     ctx: Context<CreateProfileContext>,
-    random_hash: [u8; 32],
     profile_type: String,
     profile_uri: String,
     info: String,
@@ -20,14 +19,12 @@ pub fn create_profile_handler(
         profile_uri,
         info,
         data,
-        random_hash,
-        bump: *ctx.bumps.get("counter_account").unwrap(),
+        bump: *ctx.bumps.get("profile_account").unwrap(),
     });
 
     emit!(NewProfile {
         profile: *profile.to_account_info().key,
         authority: *ctx.accounts.payer.to_account_info().key,
-        random_hash,
         timestamp: Clock::get()?.unix_timestamp,
         profile_type: profile.profile_type.clone(),
         profile_uri: profile.profile_uri.clone(),
@@ -62,7 +59,7 @@ pub fn update_profile_handler(
 }
 
 #[derive(Accounts)]
-#[instruction(random_hash: [u8;32], profile_type: String)]
+#[instruction(profile_type: String)]
 pub struct CreateProfileContext<'info> {
     // The account that will be initialized as a Profile
     #[account(
@@ -70,7 +67,6 @@ pub struct CreateProfileContext<'info> {
         seeds = [b"profile-account",
         payer.key().as_ref(),
             PROFILE_PREFIX_SEED.as_bytes(),
-            random_hash.as_ref(),
             profile_type.as_bytes()
         ],
         bump,
@@ -93,7 +89,6 @@ pub struct UpdateProfileContext<'info> {
         seeds = [b"profile-account",
         payer.key().as_ref(),
             PROFILE_PREFIX_SEED.as_bytes(),
-            profile_account.random_hash.as_ref(),
             profile_account.profile_type.as_bytes()
         ],
         bump = profile_account.bump

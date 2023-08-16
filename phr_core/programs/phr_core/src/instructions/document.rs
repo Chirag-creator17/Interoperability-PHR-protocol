@@ -20,7 +20,8 @@ pub fn create_document_handler(
         data,
         timestamp:Clock::get()?.unix_timestamp,
         uri,
-        random_hash
+        random_hash,
+        bump: *ctx.bumps.get("document_account").unwrap()
     });
 
     emit!(CreateDocument{
@@ -58,7 +59,7 @@ pub struct CreateDocumentContext<'info> {
         seeds = [b"profile-account",
         payer.key().as_ref(),
             PROFILE_PREFIX_SEED.as_bytes(),
-            profile_account.random_hash.as_ref(),
+            profile_account.profile_type.as_bytes()
         ],
         bump = profile_account.bump,
     )]

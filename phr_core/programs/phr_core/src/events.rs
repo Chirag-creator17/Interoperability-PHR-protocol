@@ -5,7 +5,6 @@ use anchor_lang::prelude::*;
 pub struct NewProfile {
     pub profile: Pubkey,
     pub authority: Pubkey,
-    pub random_hash: [u8; 32],
     pub timestamp: i64, 
     pub profile_type: String,
     pub profile_uri: String,

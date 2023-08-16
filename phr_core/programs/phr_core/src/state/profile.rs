@@ -19,8 +19,6 @@ pub struct Profile {
     // Sensitive encrypted data
     pub data: String,
 
-    pub random_hash: [u8; 32],
-
     pub bump: u8,
 }
 

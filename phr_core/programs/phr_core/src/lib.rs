@@ -16,7 +16,6 @@ pub mod phr_core {
     // Create a new User Profile
     pub fn create_profile(
         ctx: Context<CreateProfileContext>,
-        random_hash: [u8; 32],
         profile_type: String,
         profile_uri: String,
         info: String,
@@ -24,7 +23,6 @@ pub mod phr_core {
     ) -> Result<()> {
         create_profile_handler(
             ctx,
-            random_hash,
             profile_type,
             profile_uri,
             info,

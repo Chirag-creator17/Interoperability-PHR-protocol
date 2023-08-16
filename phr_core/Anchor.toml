@@ -8,7 +8,7 @@ phr_core = "GbcXdmj7dycduP6b7FBSq5x9bmDYBjPTbUzvVDrm4TxJ"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet"
+cluster = "Devnet"
 wallet = "/Users/kunalchhabra/.config/solana/id.json"
 
 [scripts]

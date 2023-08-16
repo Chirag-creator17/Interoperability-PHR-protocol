@@ -18,6 +18,7 @@ pub struct Document {
     // Encrypted URI of Document
     pub uri: String,
     pub random_hash: [u8; 32],
+    pub bump: u8,
 }
 
 impl Document {
