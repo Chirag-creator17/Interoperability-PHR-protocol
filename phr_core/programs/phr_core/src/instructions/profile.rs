@@ -14,7 +14,7 @@ pub fn create_profile_handler(
     let profile = &mut ctx.accounts.profile_account;
 
     profile.set_inner(Profile {
-        authority: *ctx.accounts.payer.to_account_info().key,
+        authority: *ctx.accounts.authority.to_account_info().key,
         profile_type,
         profile_uri,
         info,
@@ -24,7 +24,7 @@ pub fn create_profile_handler(
 
     emit!(NewProfile {
         profile: *profile.to_account_info().key,
-        authority: *ctx.accounts.payer.to_account_info().key,
+        authority: *ctx.accounts.authority.to_account_info().key,
         timestamp: Clock::get()?.unix_timestamp,
         profile_type: profile.profile_type.clone(),
         profile_uri: profile.profile_uri.clone(),
@@ -65,7 +65,7 @@ pub struct CreateProfileContext<'info> {
     #[account(
         init,
         seeds = [b"profile-account",
-        payer.key().as_ref(),
+        authority.key().as_ref(),
             PROFILE_PREFIX_SEED.as_bytes(),
             profile_type.as_bytes()
         ],
@@ -78,6 +78,8 @@ pub struct CreateProfileContext<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
 
+    /// CHECK: Create account for that particular user
+    pub authority: AccountInfo<'info>,
     // The system program
     pub system_program: Program<'info, System>,
 }
@@ -87,7 +89,7 @@ pub struct UpdateProfileContext<'info> {
     #[account(
         mut,
         seeds = [b"profile-account",
-        payer.key().as_ref(),
+        authority.key().as_ref(),
             PROFILE_PREFIX_SEED.as_bytes(),
             profile_account.profile_type.as_bytes()
         ],
@@ -97,4 +99,7 @@ pub struct UpdateProfileContext<'info> {
 
     #[account(mut)]
     pub payer: Signer<'info>,
+
+    /// CHECK: Create account for that particular user
+    pub authority: AccountInfo<'info>,
 }

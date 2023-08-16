@@ -16,6 +16,11 @@
           "isSigner": true
         },
         {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -52,6 +57,11 @@
           "name": "payer",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": false
         }
       ],
       "args": [
@@ -84,6 +94,11 @@
         },
         {
           "name": "profileAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
           "isMut": false,
           "isSigner": false
         },
@@ -309,5 +324,8 @@
         }
       ]
     }
-  ]
+  ],
+  "metadata": {
+    "address": "GbcXdmj7dycduP6b7FBSq5x9bmDYBjPTbUzvVDrm4TxJ"
+  }
 }

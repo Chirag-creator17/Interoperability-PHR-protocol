@@ -1,6 +1,6 @@
 const anchor = require("@project-serum/anchor");
 const randomBytes = require('randombytes');
-const { PublicKey, SystemProgram } = require("@solana/web3.js");
+const { PublicKey, SystemProgram, Keypair } = require("@solana/web3.js");
 const idl = require('../idl/phr_core.json')
 
 const provider = anchor.AnchorProvider.env();
@@ -23,11 +23,15 @@ const createProfile = async () => {
         age: 22
     })
     const data = '';
-
+    const keypair = Keypair.generate()
+    console.log(keypair)
+    console.log(keypair.secretKey) // Uint8Array(64)
+    console.log(keypair.publicKey)
+    
     const [profileAccountPDA, _] = PublicKey.findProgramAddressSync(
         [
             anchor.utils.bytes.utf8.encode("profile-account"),
-            provider.wallet.publicKey.toBuffer(),
+            keypair.publicKey.toBuffer(),
             anchor.utils.bytes.utf8.encode(PROFILE_PREFIX_SEED),
             anchor.utils.bytes.utf8.encode(profileType)
         ],
@@ -36,10 +40,11 @@ const createProfile = async () => {
         console.log(profileAccountPDA.toString())
     let trx = await program.methods.createProfile(profileType, profileUri, info, data).accounts({
         profileAccount: profileAccountPDA,
-        payer: provider.wallet.publicKey
+        payer: provider.wallet.publicKey,
+        authority: keypair.publicKey
     }).rpc()
 
-    console.log('Your account: ', profileAccountPDA.toString(), "trx:", trx, "");
+    console.log('Your account: ', profileAccountPDA.toString(), "trx:", trx, "", "your account", keypair.publicKey.toString());
 }
 
 const updateProfile = async () => {
@@ -50,11 +55,20 @@ const updateProfile = async () => {
         age: 21
     })
     const data = '';
+    const secretKey = Uint8Array.from([
+        216, 139,  86,   4,  78,  28, 171, 254, 110,  41, 145,
+         95,  69, 175, 183, 226, 155,  39, 141, 151, 189, 107,
+         89, 122,  48,  31,  45, 223, 248, 135, 163,   6, 227,
+        214,  33, 194, 119, 166, 204,  27,  85, 200, 220, 176,
+         29,  91,  55, 191,  59,  69,  62,  42, 253, 144, 244,
+        215, 252, 139,  68, 212, 151,  24, 207,  57
+      ])
 
+    const keypair = Keypair.fromSecretKey(secretKey)
     const [profileAccountPDA, _] = PublicKey.findProgramAddressSync(
         [
             anchor.utils.bytes.utf8.encode("profile-account"),
-            provider.wallet.publicKey.toBuffer(),
+            keypair.publicKey.toBuffer(),
             anchor.utils.bytes.utf8.encode(PROFILE_PREFIX_SEED),
             anchor.utils.bytes.utf8.encode(profileType)
         ],
@@ -63,7 +77,8 @@ const updateProfile = async () => {
 
     const trx = await program.methods.updateProfile(profileUri, info, data).accounts({
         profileAccount: profileAccountPDA,
-        payer: provider.wallet.publicKey
+        payer: provider.wallet.publicKey,
+        authority: keypair.publicKey
     }).rpc();
     console.log('trx', trx)
 }
@@ -78,12 +93,22 @@ const createDocument = async () => {
     const data = "";
     const uri = "https://github.com/kunalchhabra37/counter-program-solana-anchor"
     const profileType = 'patient'
-    // console.log(provider.wallet)
-    // console.log(provider.wallet.publicKey)
+
+    const secretKey = Uint8Array.from([
+        216, 139,  86,   4,  78,  28, 171, 254, 110,  41, 145,
+         95,  69, 175, 183, 226, 155,  39, 141, 151, 189, 107,
+         89, 122,  48,  31,  45, 223, 248, 135, 163,   6, 227,
+        214,  33, 194, 119, 166, 204,  27,  85, 200, 220, 176,
+         29,  91,  55, 191,  59,  69,  62,  42, 253, 144, 244,
+        215, 252, 139,  68, 212, 151,  24, 207,  57
+      ])
+
+    const keypair = Keypair.fromSecretKey(secretKey)
+    
     const [profileAccountPDA, _] = PublicKey.findProgramAddressSync(
         [
             anchor.utils.bytes.utf8.encode("profile-account"),
-            provider.wallet.publicKey.toBuffer(),
+            keypair.publicKey.toBuffer(),
             anchor.utils.bytes.utf8.encode(PROFILE_PREFIX_SEED),
             anchor.utils.bytes.utf8.encode(profileType)
         ],
@@ -103,7 +128,8 @@ const createDocument = async () => {
     const trx = await program.methods.createDocument(randomHash, description, data, uri).accounts({
         documentAccount: documentAccountPDA,
         payer: provider.wallet.publicKey,
-        profileAccount: profileAccountPDA
+        profileAccount: profileAccountPDA,
+        authority: keypair.publicKey
     }).rpc()
 
     console.log("profile", profileAccountPDA.toString(), "document", documentAccountPDA.toString(),"trx", trx)

@@ -57,7 +57,7 @@ pub struct CreateDocumentContext<'info> {
 
     #[account(
         seeds = [b"profile-account",
-        payer.key().as_ref(),
+        authority.key().as_ref(),
             PROFILE_PREFIX_SEED.as_bytes(),
             profile_account.profile_type.as_bytes()
         ],
@@ -65,6 +65,9 @@ pub struct CreateDocumentContext<'info> {
     )]
     pub profile_account: Account<'info, Profile>,
 
+    /// CHECK: Create account for that particular user
+    pub authority: AccountInfo<'info>,
+    
     // The system program
     pub system_program: Program<'info, System>,
 }
