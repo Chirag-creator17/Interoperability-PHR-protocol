@@ -1,4 +1,5 @@
 const axios = require("axios");
+const jwt = require("jsonwebtoken");
 
 const loginPhone = async (req, res) => {
   const { phone } = req.body;
@@ -23,21 +24,27 @@ function randonHealthId() {
 }
 const loginOtp = async (req, res) => {
   const { otp, role } = req.body;
-    if (otp) {
-      dummyData.role = role;
-      dummyData.mobileLinkedHid.healthId= randonHealthId();
-        if (role === "user") {
-            return res.status(200).json(dummyData);
-        }
-        else {
-            dummyData.mobileLinkedHid.healthIdNumber = "25-8000-3683-6969";
-            return res.status(200).json(dummyData);
-        }
+  if (otp) {
+    dummyData.role = role;
+    dummyData.mobileLinkedHid.healthId = randonHealthId();
+    const token = jwt.sign(
+      { health_id: dummyData.mobileLinkedHid.healthIdNumber },
+      process.env.TOKEN_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
+    dummyData.auth_token = token;
+    if (role === "user") {
+      return res.status(200).json(dummyData);
+    } else {
+      dummyData.mobileLinkedHid.healthIdNumber = "25-8000-3683-6969";
+      return res.status(200).json(dummyData);
     }
-    else {
-        return res.status(400).json({ msg: "Invalid OTP" });
-    }
-//   console.log(otp, role);
+  } else {
+    return res.status(400).json({ msg: "Invalid OTP" });
+  }
+  //   console.log(otp, role);
 };
 const getPHR = async (req, res) => {
   const { abhaID } = req.body;
