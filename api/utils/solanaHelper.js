@@ -1,6 +1,10 @@
 const randomBytes = require("randombytes");
 const { PublicKey, SystemProgram, Keypair } = require("@solana/web3.js");
-
+const anchor = require("@project-serum/anchor");
+const idl = require("../idl/phr_core.json");
+const provider = anchor.AnchorProvider.env();
+anchor.setProvider(provider);
+const connection = provider.connection;
 const PROFILE_PREFIX_SEED = "profile";
 const DOCUMENT_PREFIX_SEED = "document";
 
