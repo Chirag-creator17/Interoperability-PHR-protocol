@@ -12,8 +12,12 @@ const programId = new PublicKey("GbcXdmj7dycduP6b7FBSq5x9bmDYBjPTbUzvVDrm4TxJ");
 const program = new anchor.Program(idl, programId, provider);
 
 const generateRandomBytes = () => {
-  const randomHash = randomBytes(32);
-  return randomHash;
+  try {
+    const randomHash = randomBytes(32);
+    return randomHash;
+  } catch (err) {
+    throw new Error("error in generating hash", err);
+  }
 };
 
 const fetchKeypairFromSecret = (secretKeyArr) => {

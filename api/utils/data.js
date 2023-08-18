@@ -1,57 +1,51 @@
 const profileInfo = (profileType, data) => {
   try {
-    if (data.phone.length != 10) throw new Error('incorrect phone no')
+    // if (data.phone.length != 10) throw new Error('incorrect phone no') // fix this length
     switch (profileType) {
-      case "patient": {
+      case "patient":
         return {
           name: data.name,
-          age: data.age,
           id: data.id,
-          phone:data.phone
+          phone: data.phone,
         };
-      }
 
-      case "doctor": {
+      case "doctor":
         return {
           name: data.name,
           degree: data.degree,
           specialisations: data.specialisations,
-          phone:data.phone
+          phone: data.phone,
         };
-      }
 
-      case "diaganostic": {
+      case "diaganostic":
         return {
           name: data.degree,
           degree: data.degree,
           specialisations: data.specialisations,
-          phone:data.phone
+          phone: data.phone,
         };
-      }
 
-      case "hospital": {
+      case "hospital":
         return {
           name: data.name,
           address: data.address,
           brochure: data.brochure,
-          phone:data.phone
+          phone: data.phone,
         };
-      }
 
-      case "clinic": {
+      case "clinic":
         return {
           name: data.name,
           address: data.address,
           brochure: data.brochure,
-          phone:data.phone
+          phone: data.phone,
         };
-      }
 
       default:
         return { err: "incorrect profile type" };
     }
   } catch (err) {
-    throw new Error("Missing Data Points for ptofile", profileType);
+    throw new Error("Missing Data Points for profile", err);
   }
 };
 

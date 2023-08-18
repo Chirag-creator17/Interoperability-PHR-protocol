@@ -21,8 +21,7 @@ const insertUser = async (id, name, profileType, publicKey,secretKey, phone ) =>
         const res = await client.query(query, [id, name,profileType ,publicKey, secretKey, phone])
         return {status: 201, msg: "success"}
     } catch(err){
-        const msg = new Error('error in fetch user', err)
-        return {status: 400, msg}
+        return {status: 400, msg: `error in fetch user ${err}`}
     } finally {
         await client.release()
         await pool.end()
@@ -39,8 +38,7 @@ const fetchUser = async (id) => {
         const {rows} = await client.query(query, [id]);
         return {status: 200, msg:"success", res: rows}
     } catch (err) {
-        const msg = new Error('error in fetch user', err)
-        return {status: 400, msg}
+        return {status: 400, msg: `error in fetch user ${err}`}
     } finally {
         await client.release()
         await pool.end()

@@ -136,4 +136,4 @@ const createDocument = async () => {
 }
 
 
-createProfile()
+createDocument()
