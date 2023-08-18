@@ -12,7 +12,9 @@ app.use(cors());
 
 app.use("/api/login", require("./routes/api.login"));
 app.use("/api/dashboard", require("./routes/api.dashboard"));
+app.use('/api/profile', require('./routes/api.profile'))
+app.use('/api/document', require('./routes/api.document'))
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`API SERVER STARTED ON ${port}`);
 });

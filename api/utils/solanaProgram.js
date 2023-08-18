@@ -25,26 +25,26 @@ const createProfile = async () => {
     const data = '';
     const keypair = Keypair.generate()
     console.log(keypair)
-    console.log(keypair.secretKey) // Uint8Array(64)
+    console.log(Array.from(keypair.secretKey)) // Uint8Array(64)
     console.log(keypair.publicKey)
     
-    const [profileAccountPDA, _] = PublicKey.findProgramAddressSync(
-        [
-            anchor.utils.bytes.utf8.encode("profile-account"),
-            keypair.publicKey.toBuffer(),
-            anchor.utils.bytes.utf8.encode(PROFILE_PREFIX_SEED),
-            anchor.utils.bytes.utf8.encode(profileType)
-        ],
-        program.programId
-    );
-        console.log(profileAccountPDA.toString())
-    let trx = await program.methods.createProfile(profileType, profileUri, info, data).accounts({
-        profileAccount: profileAccountPDA,
-        payer: provider.wallet.publicKey,
-        authority: keypair.publicKey
-    }).rpc()
+    // const [profileAccountPDA, _] = PublicKey.findProgramAddressSync(
+    //     [
+    //         anchor.utils.bytes.utf8.encode("profile-account"),
+    //         keypair.publicKey.toBuffer(),
+    //         anchor.utils.bytes.utf8.encode(PROFILE_PREFIX_SEED),
+    //         anchor.utils.bytes.utf8.encode(profileType)
+    //     ],
+    //     program.programId
+    // );
+    //     console.log(profileAccountPDA.toString())
+    // let trx = await program.methods.createProfile(profileType, profileUri, info, data).accounts({
+    //     profileAccount: profileAccountPDA,
+    //     payer: provider.wallet.publicKey,
+    //     authority: keypair.publicKey
+    // }).rpc()
 
-    console.log('Your account: ', profileAccountPDA.toString(), "trx:", trx, "", "your account", keypair.publicKey.toString());
+    // console.log('Your account: ', profileAccountPDA.toString(), "trx:", trx, "", "your account", keypair.publicKey.toString());
 }
 
 const updateProfile = async () => {
@@ -136,4 +136,4 @@ const createDocument = async () => {
 }
 
 
-createDocument()
+createProfile()
