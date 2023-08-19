@@ -17,18 +17,6 @@ const loginPhone = async (req, res) => {
   // }
   res.status(200).json({ msg: "OTP sent" });
 };
-const dummyData = {
-  txnid: "25c1b379-984c-4b56-a86f-58c386879149",
-  token:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
-  mobileLinkedHid: {
-    healthIdNumber: "25-8180-3683-5375",
-    healthId: "string",
-    name: "priya",
-    profilePhoto: "string",
-    phrAddress: "string",
-  },
-};
 function randonHealthId() {
   const hid = Math.floor(Math.random() * 100000000).toString();
   return hid;
@@ -74,18 +62,30 @@ const loginOtp = async (req, res) => {
   //   return res.status(401).json({ msg: "OTP not verified" });
   // }
   if (otp === "123456") {
+    const dummyData = {
+      txnid: "25c1b379-984c-4b56-a86f-58c386879149",
+      token:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+      mobileLinkedHid: {
+        healthIdNumber: "25-8180-3683-5375",
+        healthId: "string",
+        name: "priya",
+        profilePhoto: "string",
+        phrAddress: "string",
+      },
+    };
     dummyData.role = role;
     if (role === "doctor") {
-      dummyData.mobileLinkedHid.healthId = "91-3174-8241-0451";
+      dummyData.mobileLinkedHid.healthIdNumber = "91-3174-8241-0451";
       dummyData.mobileLinkedHid.name = "Dr. chiru";
     } else if (role === "diagnostic") {
-      dummyData.mobileLinkedHid.healthId = "81-3274-8241-0451";
+      dummyData.mobileLinkedHid.healthIdNumber = "81-3274-8241-0451";
       dummyData.mobileLinkedHid.name = "atishay";
     } else if (role === "hospital") {
-      dummyData.mobileLinkedHid.healthId = "71-3177-8271-0451";
+      dummyData.mobileLinkedHid.healthIdNumber = "71-3177-8271-0451";
       dummyData.mobileLinkedHid.name = "rishu hospital";
     } else if (role === "clinic") {
-      dummyData.mobileLinkedHid.healthId = "61-3174-8241-0451";
+      dummyData.mobileLinkedHid.healthIdNumber = "61-3174-8241-0451";
       dummyData.mobileLinkedHid.name = "golu clinic";
     }
     dummyData.mobileLinkedHid.healthId = randonHealthId();

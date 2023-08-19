@@ -7,7 +7,6 @@ const HeaderComponent = () => {
     <Navbar className="navbar">
       <Container>
           <div className="header">Interoperability PHR protocol</div>
-        <Navbar.Toggle />
       </Container>
     </Navbar>
   );
