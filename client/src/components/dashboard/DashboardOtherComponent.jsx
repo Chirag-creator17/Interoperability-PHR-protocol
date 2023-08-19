@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -8,24 +8,26 @@ import Button from "react-bootstrap/Button";
 import "./styles.css";
 export const OtherDashComponent = () => {
   const navigate = useNavigate();
+  const name = localStorage.getItem("name");
+  const hid = localStorage.getItem("health_id");
+  useEffect(() => {
+    if (localStorage.getItem("auth_token") === null) {
+      navigate("/");
+    }
+  }, []);
   return (
     <Container>
       <Row>
-        <Col>
-          <h1>Dashboard</h1>
-        </Col>
-      </Row>
-      <Row>
         <Col md={6}>
-          <div className="user-name">Chirag Goel</div>
-          <div className="abha">91-3174-8241-0451</div>
+          <div className="user-name">{name}</div>
+          <div className="abha">{hid}</div>
         </Col>
         <Col md={6} style={{ textAlign: "end" }}>
           <Button
             className="route-button"
             onClick={() => navigate("/activeRequest")}
           >
-            Create Request
+            Create requests
           </Button>
         </Col>
       </Row>
