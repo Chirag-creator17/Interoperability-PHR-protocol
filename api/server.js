@@ -14,6 +14,7 @@ app.use("/api/login", require("./routes/api.login"));
 app.use("/api/dashboard", require("./routes/api.dashboard"));
 app.use('/api/profile', require('./routes/api.profile'))
 app.use('/api/document', require('./routes/api.document'))
+app.use('/api/authority', require('./routes/api.authority'))
 
 app.listen(port, () => {
   console.log(`API SERVER STARTED ON ${port}`);

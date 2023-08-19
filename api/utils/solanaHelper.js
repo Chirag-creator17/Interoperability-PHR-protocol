@@ -7,8 +7,9 @@ anchor.setProvider(provider);
 const connection = provider.connection;
 const PROFILE_PREFIX_SEED = "profile";
 const DOCUMENT_PREFIX_SEED = "document";
+const AUTHORITY_PREFIX_SEED = "authority";
 
-const programId = new PublicKey("GbcXdmj7dycduP6b7FBSq5x9bmDYBjPTbUzvVDrm4TxJ");
+const programId = new PublicKey("GSiSj8YhmofUYTTppey9H9V2LWCB9JkDvhsx6TQaBAY6");
 const program = new anchor.Program(idl, programId, provider);
 
 const generateRandomBytes = () => {
@@ -43,11 +44,11 @@ const findProgramAddress = (seedsArray) => {
   }
 };
 
-const findProfileAccountPDA = (keypair, profileType) => {
+const findProfileAccountPDA = (id, profileType) => {
   try {
     const seeds = [
       anchor.utils.bytes.utf8.encode("profile-account"),
-      keypair.publicKey.toBuffer(),
+      anchor.utils.bytes.utf8.encode(id),
       anchor.utils.bytes.utf8.encode(PROFILE_PREFIX_SEED),
       anchor.utils.bytes.utf8.encode(profileType),
     ];
@@ -57,9 +58,9 @@ const findProfileAccountPDA = (keypair, profileType) => {
   }
 };
 
-const findDocumentAccountPDA = (keypair, profileType, randomHash) => {
+const findDocumentAccountPDA = (id, profileType, randomHash) => {
   try {
-    const profileAccountPDA = findProfileAccountPDA(keypair, profileType);
+    const profileAccountPDA = findProfileAccountPDA(id, profileType);
     const seeds = [
       anchor.utils.bytes.utf8.encode("document-account"),
       profileAccountPDA.toBuffer(),
@@ -72,9 +73,25 @@ const findDocumentAccountPDA = (keypair, profileType, randomHash) => {
   }
 };
 
+const findAuthorityAccountPDA = (id, profileType, authorisedAccount) => {
+  try {
+    const profileAccountPDA = findProfileAccountPDA(id, profileType);
+    const seeds = [
+      anchor.utils.bytes.utf8.encode("authority-account"),
+      profileAccountPDA.toBuffer(),
+      authorisedAccount.toBuffer(),
+      anchor.utils.bytes.utf8.encode(AUTHORITY_PREFIX_SEED),
+    ];
+    return findProgramAddress(seeds)
+  } catch (err) {
+    throw new Error("error in finding authority account", err);
+  }
+};
+
 module.exports = {
   generateRandomBytes,
   findProfileAccountPDA,
   findDocumentAccountPDA,
   fetchKeypairFromSecret,
+  findAuthorityAccountPDA
 };

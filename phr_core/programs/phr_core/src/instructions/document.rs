@@ -57,11 +57,12 @@ pub struct CreateDocumentContext<'info> {
 
     #[account(
         seeds = [b"profile-account",
-        authority.key().as_ref(),
+        profile_account.id.as_bytes(),
             PROFILE_PREFIX_SEED.as_bytes(),
             profile_account.profile_type.as_bytes()
         ],
         bump = profile_account.bump,
+        has_one = authority
     )]
     pub profile_account: Account<'info, Profile>,
 

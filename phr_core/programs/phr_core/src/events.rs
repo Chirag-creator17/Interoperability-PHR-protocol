@@ -6,6 +6,7 @@ pub struct NewProfile {
     pub profile: Pubkey,
     pub authority: Pubkey,
     pub timestamp: i64, 
+    pub id: String,
     pub profile_type: String,
     pub profile_uri: String,
     pub data: String,
@@ -17,6 +18,8 @@ pub struct UpdateProfile {
     pub profile: Pubkey,
     pub timestamp: i64, 
     pub profile_uri: String,
+    pub id: String,
+    pub profile_type: String,
     pub data: String,
     pub info: String
 }
@@ -32,3 +35,18 @@ pub struct CreateDocument {
     pub data: String,
 }
 
+#[event]
+pub struct Authorise {
+    pub authority_account: Pubkey,
+    pub authorised: Pubkey,
+    pub profile: Pubkey,
+    pub authority: Pubkey,
+}
+
+#[event]
+pub struct RevokeAuthority {
+    pub authority_account: Pubkey,
+    pub authorised: Pubkey,
+    pub profile: Pubkey,
+    pub authority: Pubkey,
+}

@@ -28,6 +28,10 @@
       ],
       "args": [
         {
+          "name": "id",
+          "type": "string"
+        },
+        {
           "name": "profileType",
           "type": "string"
         },
@@ -44,6 +48,78 @@
           "type": "string"
         }
       ]
+    },
+    {
+      "name": "authorise",
+      "accounts": [
+        {
+          "name": "authorityAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "profileAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authorised",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "revokeAuthority",
+      "accounts": [
+        {
+          "name": "authorityAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "profileAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authorised",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     },
     {
       "name": "updateProfile",
@@ -112,7 +188,10 @@
         {
           "name": "randomHash",
           "type": {
-            "array": ["u8", 32]
+            "array": [
+              "u8",
+              32
+            ]
           }
         },
         {
@@ -131,6 +210,30 @@
     }
   ],
   "accounts": [
+    {
+      "name": "Authority",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authorised",
+            "type": "publicKey"
+          },
+          {
+            "name": "profile",
+            "type": "publicKey"
+          },
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
     {
       "name": "Document",
       "type": {
@@ -159,7 +262,10 @@
           {
             "name": "randomHash",
             "type": {
-              "array": ["u8", 32]
+              "array": [
+                "u8",
+                32
+              ]
             }
           },
           {
@@ -177,6 +283,10 @@
           {
             "name": "authority",
             "type": "publicKey"
+          },
+          {
+            "name": "id",
+            "type": "string"
           },
           {
             "name": "profileType",
@@ -222,6 +332,11 @@
           "index": false
         },
         {
+          "name": "id",
+          "type": "string",
+          "index": false
+        },
+        {
           "name": "profileType",
           "type": "string",
           "index": false
@@ -262,6 +377,16 @@
           "index": false
         },
         {
+          "name": "id",
+          "type": "string",
+          "index": false
+        },
+        {
+          "name": "profileType",
+          "type": "string",
+          "index": false
+        },
+        {
           "name": "data",
           "type": "string",
           "index": false
@@ -289,7 +414,10 @@
         {
           "name": "randomHash",
           "type": {
-            "array": ["u8", 32]
+            "array": [
+              "u8",
+              32
+            ]
           },
           "index": false
         },
@@ -314,9 +442,56 @@
           "index": false
         }
       ]
+    },
+    {
+      "name": "Authorise",
+      "fields": [
+        {
+          "name": "authorityAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "authorised",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "profile",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "authority",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "RevokeAuthority",
+      "fields": [
+        {
+          "name": "authorityAccount",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "authorised",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "profile",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "authority",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
     }
-  ],
-  "metadata": {
-    "address": "GbcXdmj7dycduP6b7FBSq5x9bmDYBjPTbUzvVDrm4TxJ"
-  }
+  ]
 }

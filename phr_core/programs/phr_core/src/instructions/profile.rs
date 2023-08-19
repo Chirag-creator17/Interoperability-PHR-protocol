@@ -6,6 +6,7 @@ use crate::events::{ NewProfile, UpdateProfile };
 
 pub fn create_profile_handler(
     ctx: Context<CreateProfileContext>,
+    id: String,
     profile_type: String,
     profile_uri: String,
     info: String,
@@ -15,6 +16,7 @@ pub fn create_profile_handler(
 
     profile.set_inner(Profile {
         authority: *ctx.accounts.authority.to_account_info().key,
+        id,
         profile_type,
         profile_uri,
         info,
@@ -26,6 +28,7 @@ pub fn create_profile_handler(
         profile: *profile.to_account_info().key,
         authority: *ctx.accounts.authority.to_account_info().key,
         timestamp: Clock::get()?.unix_timestamp,
+        id: profile.id.clone(),
         profile_type: profile.profile_type.clone(),
         profile_uri: profile.profile_uri.clone(),
         data: profile.data.clone(),
@@ -47,27 +50,30 @@ pub fn update_profile_handler(
     profile.info = info;
     profile.data = data;
 
-    emit!(UpdateProfile{
-     profile: *profile.to_account_info().key,
-     timestamp: Clock::get()?.unix_timestamp, 
-     profile_uri: profile.profile_uri.clone() ,
-     data: profile.data.clone(),
-     info: profile.data.clone()
+    emit!(UpdateProfile {
+        profile: *profile.to_account_info().key,
+        timestamp: Clock::get()?.unix_timestamp,
+        profile_uri: profile.profile_uri.clone(),
+        id: profile.id.clone(),
+        profile_type: profile.profile_type.clone(),
+        data: profile.data.clone(),
+        info: profile.data.clone(),
     });
-    
+
     Ok(())
 }
 
 #[derive(Accounts)]
-#[instruction(profile_type: String)]
+#[instruction(id:String, profile_type: String)]
 pub struct CreateProfileContext<'info> {
     // The account that will be initialized as a Profile
     #[account(
         init,
-        seeds = [b"profile-account",
-        authority.key().as_ref(),
+        seeds = [
+            b"profile-account",
+            id.as_bytes(),
             PROFILE_PREFIX_SEED.as_bytes(),
-            profile_type.as_bytes()
+            profile_type.as_bytes(),
         ],
         bump,
         payer = payer,
@@ -89,11 +95,12 @@ pub struct UpdateProfileContext<'info> {
     #[account(
         mut,
         seeds = [b"profile-account",
-        authority.key().as_ref(),
+        profile_account.id.as_bytes(),
             PROFILE_PREFIX_SEED.as_bytes(),
             profile_account.profile_type.as_bytes()
         ],
-        bump = profile_account.bump
+        bump = profile_account.bump,
+        has_one = authority
     )]
     pub profile_account: Account<'info, Profile>,
 
