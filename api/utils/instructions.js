@@ -160,7 +160,9 @@ const fetchDocumentRPC = async (keypair, profileType) => {
       return acc;
     });
     return { status: 200, accounts };
-  } catch (err) {}
+  } catch (err) {
+    return { status: 400, msg: `error in fetching document ${err}` };
+  }
 };
 
 module.exports = {

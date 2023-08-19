@@ -190,10 +190,82 @@ const updateProfile = async (req, res) => {
 };
 
 
+const fetchProfile = async (req,res) => {
+  try {
+    const id = req.body.id;
+    const fetchUserRes = await fetchUser(id);
+    if (fetchUserRes.status === 400) {
+      return res.status(400).send({ msg: fetchUserRes.msg });
+    }
 
+    if (fetchUserRes.res.length === 0) {
+      return res.status(400).send({ msg: "user not found" });
+    }
+
+    const profile = fetchUserRes.res[0];
+    const keypair = fetchKeypairFromSecret(profile["secret_key"]);
+
+    const profileRes = await fetchProfileRPC(keypair)
+    if(profileRes.status === 400){
+      return res.status(400).send({
+        msg: profileRes.msg
+      })
+    }
+
+    return res.status(200).send({
+      msg:"success",
+      documents: profileRes.accounts
+    })
+  } catch (err) {
+    res.status(400).send({
+      msg:`error in profile fetching: ${err}`
+    })
+  }
+}
+
+const fetchDocument = async (req, res) => {
+  try {
+    const id = req.body.id;
+    const fetchUserRes = await fetchUser(id);
+    if (fetchUserRes.status === 400) {
+      return res.status(400).send({ msg: fetchUserRes.msg });
+    }
+
+    if (fetchUserRes.res.length === 0) {
+      return res.status(400).send({ msg: "user not found" });
+    }
+
+    const profile = fetchUserRes.res[0];
+    const profileType = req.body.profileType;
+    if (!profileTypeCheck(profileType)) {
+      return res.status(400).send({
+        msg: "profile type incorrect, choose between: patient, doctor, diaganostic, hospital, clinic",
+      });
+    }
+    const keypair = fetchKeypairFromSecret(profile["secret_key"]);
+
+    const fetchDocRes = await fetchDocumentRPC(keypair, profileType)
+    if(fetchDocRes.status === 400){
+      return res.status(400).send({
+        msg: fetchDocRes.msg
+      })
+    }
+
+    return res.status(200).send({
+      msg:"success",
+      documents: fetchDocRes.accounts
+    })
+  } catch (err) {
+    res.status(400).send({
+      msg:`error in profile fetching: ${err}`
+    })
+  }
+}
 
 module.exports = {
   createProfile,
   updateProfile,
   createDocument,
+  fetchDocument,
+  fetchProfile
 };
