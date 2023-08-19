@@ -75,6 +75,19 @@ const loginOtp = async (req, res) => {
   // }
   if (otp === "123456") {
     dummyData.role = role;
+    if (role === "doctor") {
+      dummyData.mobileLinkedHid.healthId = "91-3174-8241-0451";
+      dummyData.mobileLinkedHid.name = "Dr. chiru";
+    } else if (role === "diagnostic") {
+      dummyData.mobileLinkedHid.healthId = "81-3274-8241-0451";
+      dummyData.mobileLinkedHid.name = "atishay";
+    } else if (role === "hospital") {
+      dummyData.mobileLinkedHid.healthId = "71-3177-8271-0451";
+      dummyData.mobileLinkedHid.name = "rishu hospital";
+    } else if (role === "clinic") {
+      dummyData.mobileLinkedHid.healthId = "61-3174-8241-0451";
+      dummyData.mobileLinkedHid.name = "golu clinic";
+    }
     dummyData.mobileLinkedHid.healthId = randonHealthId();
     dummyData.mobileLinkedHid.phone = phone;
     const token = jwt.sign(
@@ -95,9 +108,8 @@ const loginOtp = async (req, res) => {
       profileUri: dummyData.mobileLinkedHid.profilePhoto,
       data: dummyData.mobileLinkedHid.phrAddress,
     };
-    user_data.id=dummyData.mobileLinkedHid.healthIdNumber;
-    const createUserUrl =
-      "http://localhost:6969/api/profile/create";
+    user_data.id = dummyData.mobileLinkedHid.healthIdNumber;
+    const createUserUrl = "http://localhost:6969/api/profile/create";
     const user_response = await axios.post(createUserUrl, user_data);
     if (user_response.status === 202 || user_response.status === 200) {
       return res.status(200).json(dummyData);
