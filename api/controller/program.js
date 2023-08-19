@@ -5,6 +5,8 @@ const {
   createProfileInstruction,
   updateProfileInstruction,
   createDocumentInstruction,
+  fetchDocumentRPC,
+  fetchProfileRPC
 } = require("../utils/instructions.js");
 const {
   generateRandomBytes,
@@ -186,6 +188,9 @@ const updateProfile = async (req, res) => {
     });
   }
 };
+
+
+
 
 module.exports = {
   createProfile,
