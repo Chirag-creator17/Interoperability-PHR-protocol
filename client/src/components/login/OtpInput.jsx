@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { useNavigate, useLocation} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -12,12 +12,32 @@ export const OtpInputComponent = () => {
   const [otp, setOtp] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(otp);
-    console.log(state.number, state.role);
-    if(state.role === "user")
-      navigate("/dashboard");
-    else
-      navigate("/dashboardOther");
+    // console.log(otp);
+    // console.log(state.number, state.role);
+    const res = await fetch("http://localhost:6969/api/login/otp", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        otp: otp,
+        phone: state.number,
+        role: state.role,
+      }),
+    });
+    if (res.status === 200) {
+      const data = await res.json();
+      console.log(data);
+      localStorage.setItem("auth_token", data.auth_token);
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("health_id", data.mobileLinkedHid.healthIdNumber);
+      localStorage.setItem("name", data.mobileLinkedHid.name);
+      if (state.role === "patient") navigate("/dashboard");
+      else navigate("/dashboardOther");
+    }
+    else {
+      alert("Error wrong otp");
+    }
   };
   return (
     <Container className="login-container">

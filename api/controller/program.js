@@ -13,7 +13,7 @@ const {
 
 const createProfile = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.body.id;
     const fetchUserRes = await fetchUser(id);
     if (fetchUserRes.status === 400) {
       return res.status(400).send(fetchUserRes.msg);
@@ -82,7 +82,7 @@ const createProfile = async (req, res) => {
 
 const createDocument = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.body.id;
     const fetchUserRes = await fetchUser(id);
     if (fetchUserRes.status === 400) {
       return res.status(400).send({ msg: fetchUserRes.msg });
@@ -133,7 +133,7 @@ const createDocument = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.body.id;
     const fetchUserRes = await fetchUser(id);
     if (fetchUserRes.status === 400) {
       return res.status(400).send({ msg: fetchUserRes.msg });

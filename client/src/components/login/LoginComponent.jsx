@@ -1,6 +1,7 @@
 import React from "react";
+import axios from "axios";
 import { useState } from "react";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -10,7 +11,29 @@ export const LoginComponent = () => {
   const [number, setNumber] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate("/otp", { state: { number: number, role: "user" } });
+    let check = false;
+    for (let i = 0; i < number.length; i++) {
+      if (number[i] < "0" || number[i] > "9") {
+        check = true;
+        break;
+      }
+    }
+    if (check) {
+      alert("Enter valid phone number");
+      return;
+    }
+    if (number.length !== 10) {
+      alert("Enter valid phone number");
+      return;
+    }
+    const res = await axios.post("http://localhost:6969/api/login/phone", {
+      phone: number,
+    });
+    if (res.status === 200) {
+      navigate("/otp", { state: { number: number, role: "patient" } });
+    } else {
+      alert("Error not registered with abha id");
+    }
   };
   return (
     <Container className="login-container">
@@ -48,7 +71,7 @@ export const LoginComponent = () => {
       <hr />
       <br />
       <div className="register">
-      <Link to="/loginOther">Click here</Link> for login for doctor or hospital
+        <Link to="/loginOther">Click here</Link> login for doctor or hospital
       </div>
     </Container>
   );

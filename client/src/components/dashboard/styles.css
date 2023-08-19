@@ -1,10 +1,12 @@
 .user-name{
-    font-size: 1.8rem;
-    font-weight: 600;
+    font-size: 1.85rem;
+    font-weight: 550;
+    font-family: Arial, Helvetica, Raleway and Museo;
 }
 .abha{
     font-size: 1rem;
     opacity: 0.8;
+    font-family: Arial, Helvetica, Raleway and Museo;
 }
 .row{
     margin-bottom: 16px;

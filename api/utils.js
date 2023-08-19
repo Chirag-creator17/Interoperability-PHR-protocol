@@ -1,10 +1,21 @@
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
-
+const abha_url_base = "https://healthidsbx.abdm.gov.in/api/";
 const loginPhone = async (req, res) => {
   const { phone } = req.body;
-  console.log(phone);
-  res.status(200).json({ otp: "965723" });
+  // const url = abha_url_base + "/v2/registration/mobile/login/generateOtp";
+  // const data = {
+  //   mobile: phone,
+  // };
+  // const headers = { Authorization: process.env.ABHA_TOKEN }
+  // const response = await axios.post(url, data, { headers });
+  // if(response.status === 200) {
+  //   return res.status(200).json({ msg: "OTP sent" });
+  // }
+  // else {
+  //   return res.status(401).json({ msg: "mobile number not registered" });
+  // }
+  res.status(200).json({ msg: "OTP sent" });
 };
 const dummyData = {
   txnid: "25c1b379-984c-4b56-a86f-58c386879149",
@@ -23,10 +34,49 @@ function randonHealthId() {
   return hid;
 }
 const loginOtp = async (req, res) => {
-  const { otp, role } = req.body;
-  if (otp) {
+  const { otp, role, phone } = req.body;
+  // const url = abha_url_base + "/v2/registration/mobile/login/verifyOtp";
+  // const data = {
+  //   otp: otp,
+  // };
+  // const headers = { Authorization: process.env.ABHA_TOKEN };
+  // const response = await axios.post(url, data, { headers });
+  // if (response.status === 200) {
+  //   const data = response.data;
+  //   data.mobileLinkedHid.phone = phone;
+  //   data.role = role;
+  //   const token = jwt.sign(
+  //     { health_id: data.mobileLinkedHid.healthIdNumber },
+  //     process.env.TOKEN_KEY,
+  //     {
+  //       expiresIn: "1h",
+  //     }
+  //   );
+  //   data.auth_token = token;
+  //   const user_data = {
+  //     info: {
+  //       name: data.mobileLinkedHid.name,
+  //       id: data.mobileLinkedHid.healthIdNumber,
+  //       phone: data.mobileLinkedHid.phone,
+  //     },
+  //     profileType: data.role,
+  //     profileUri: data.mobileLinkedHid.profilePhoto,
+  //     data: data.mobileLinkedHid.phrAddress,
+  //   };
+  //   const createUserUrl =
+  //     "http://localhost:6969/api/profile/create/" +
+  //     data.mobileLinkedHid.healthIdNumber;
+  //   const user_response = await axios.post(createUserUrl, user_data);
+  //   if (user_response.status === 202 || user_response.status === 200) {
+  //     return res.status(200).json({ msg: "OTP verified", data: data });
+  //   }
+  // } else{
+  //   return res.status(401).json({ msg: "OTP not verified" });
+  // }
+  if (otp === "123456") {
     dummyData.role = role;
     dummyData.mobileLinkedHid.healthId = randonHealthId();
+    dummyData.mobileLinkedHid.phone = phone;
     const token = jwt.sign(
       { health_id: dummyData.mobileLinkedHid.healthIdNumber },
       process.env.TOKEN_KEY,
@@ -35,16 +85,26 @@ const loginOtp = async (req, res) => {
       }
     );
     dummyData.auth_token = token;
-    if (role === "user") {
-      return res.status(200).json(dummyData);
-    } else {
-      dummyData.mobileLinkedHid.healthIdNumber = "25-8000-3683-6969";
+    const user_data = {
+      info: {
+        name: dummyData.mobileLinkedHid.name,
+        id: dummyData.mobileLinkedHid.healthIdNumber,
+        phone: dummyData.mobileLinkedHid.phone,
+      },
+      profileType: dummyData.role,
+      profileUri: dummyData.mobileLinkedHid.profilePhoto,
+      data: dummyData.mobileLinkedHid.phrAddress,
+    };
+    user_data.id=dummyData.mobileLinkedHid.healthIdNumber;
+    const createUserUrl =
+      "http://localhost:6969/api/profile/create";
+    const user_response = await axios.post(createUserUrl, user_data);
+    if (user_response.status === 202 || user_response.status === 200) {
       return res.status(200).json(dummyData);
     }
   } else {
-    return res.status(400).json({ msg: "Invalid OTP" });
+    return res.status(401).json({ msg: "OTP not verified" });
   }
-  //   console.log(otp, role);
 };
 const getPHR = async (req, res) => {
   const { abhaID } = req.body;
