@@ -17,7 +17,7 @@ export const UserDashComponent = () => {
     if (localStorage.getItem("auth_token") === null) {
       navigate("/");
     }
-  }, []);
+  }, [navigate]);
   async function fetchData() {
     try {
       const data = {
@@ -42,6 +42,7 @@ export const UserDashComponent = () => {
   }
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

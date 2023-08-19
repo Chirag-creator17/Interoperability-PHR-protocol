@@ -17,7 +17,7 @@ export const OtherDashComponent = () => {
     if (localStorage.getItem("auth_token") === null) {
       navigate("/");
     }
-  }, []);
+  }, [navigate]);
   async function fetchData() {
     try {
       const data = {
@@ -42,6 +42,7 @@ export const OtherDashComponent = () => {
   }
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -54,9 +55,9 @@ export const OtherDashComponent = () => {
         <Col md={6} style={{ textAlign: "end" }}>
           <Button
             className="route-button"
-            onClick={() => navigate("/activeRequest")}
+            onClick={() => navigate("/createPHR")}
           >
-            Active requests
+            Create PHR
           </Button>
         </Col>
       </Row>
