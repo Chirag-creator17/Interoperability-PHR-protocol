@@ -114,8 +114,8 @@ const createDocumentInstruction = async (
 
 const fetchProfileRPC = async (keypair) => {
   try {
-    let accounts = await program.account.profile.all({
-      GetProgramAccountsFilter: [
+    let accounts = await program.account.profile.all(
+      [
         {
           memcmp: {
             offset: 8,
@@ -123,7 +123,7 @@ const fetchProfileRPC = async (keypair) => {
           },
         },
       ],
-    });
+    );
 
     accounts = accounts.map((acc) => {
       acc.publicKey = acc.publicKey.toString();
@@ -140,8 +140,8 @@ const fetchProfileRPC = async (keypair) => {
 const fetchDocumentRPC = async (keypair, profileType) => {
   try {
     const profileAccountPDA = findProfileAccountPDA(keypair, profileType);
-    let accounts = await program.account.document.all({
-      GetProgramAccountsFilter: [
+    let accounts = await program.account.document.all(
+      [
         {
           memcmp: {
             offset: 8,
@@ -149,7 +149,7 @@ const fetchDocumentRPC = async (keypair, profileType) => {
           },
         },
       ],
-    });
+    );
 
     accounts = accounts.map((acc) => {
       acc.publicKey = acc.publicKey.toString();

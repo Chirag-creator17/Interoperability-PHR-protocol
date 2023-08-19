@@ -97,19 +97,19 @@ const createDocument = async () => {
   const uri = "https://github.com/kunalchhabra37/counter-program-solana-anchor";
   const profileType = "patient";
 
-  const secretKey = Uint8Array.from([
-    216, 139, 86, 4, 78, 28, 171, 254, 110, 41, 145, 95, 69, 175, 183, 226, 155,
-    39, 141, 151, 189, 107, 89, 122, 48, 31, 45, 223, 248, 135, 163, 6, 227,
-    214, 33, 194, 119, 166, 204, 27, 85, 200, 220, 176, 29, 91, 55, 191, 59, 69,
-    62, 42, 253, 144, 244, 215, 252, 139, 68, 212, 151, 24, 207, 57,
-  ]);
+//   const secretKey = Uint8Array.from([
+//     216, 139, 86, 4, 78, 28, 171, 254, 110, 41, 145, 95, 69, 175, 183, 226, 155,
+//     39, 141, 151, 189, 107, 89, 122, 48, 31, 45, 223, 248, 135, 163, 6, 227,
+//     214, 33, 194, 119, 166, 204, 27, 85, 200, 220, 176, 29, 91, 55, 191, 59, 69,
+//     62, 42, 253, 144, 244, 215, 252, 139, 68, 212, 151, 24, 207, 57,
+//   ]);
 
-  const keypair = Keypair.fromSecretKey(secretKey);
+//   const keypair = Keypair.fromSecretKey(secretKey);
 
   const [profileAccountPDA, _] = PublicKey.findProgramAddressSync(
     [
       anchor.utils.bytes.utf8.encode("profile-account"),
-      keypair.publicKey.toBuffer(),
+      provider.wallet.publicKey.toBuffer(),
       anchor.utils.bytes.utf8.encode(PROFILE_PREFIX_SEED),
       anchor.utils.bytes.utf8.encode(profileType),
     ],
@@ -132,7 +132,7 @@ const createDocument = async () => {
       documentAccount: documentAccountPDA,
       payer: provider.wallet.publicKey,
       profileAccount: profileAccountPDA,
-      authority: keypair.publicKey,
+      authority: provider.wallet.publicKey,
     })
     .rpc();
 
@@ -147,64 +147,64 @@ const createDocument = async () => {
 };
 
 const fetch = async () => {
-    // const [profileAccountPDA, _] = PublicKey.findProgramAddressSync(
-    //     [
-    //       anchor.utils.bytes.utf8.encode("profile-account"),
-    //       provider.wallet.publicKey.toBuffer(),
-    //       anchor.utils.bytes.utf8.encode(PROFILE_PREFIX_SEED),
-    //       anchor.utils.bytes.utf8.encode('patient'),
-    //     ],
-    //     program.programId
-    //   );
-//     console.log(provider.wallet.publicKey.toBase58())
-//   const accounts = await connection.getParsedProgramAccounts(
+    const [profileAccountPDA, _] = PublicKey.findProgramAddressSync(
+        [
+          anchor.utils.bytes.utf8.encode("profile-account"),
+          provider.wallet.publicKey.toBuffer(),
+          anchor.utils.bytes.utf8.encode(PROFILE_PREFIX_SEED),
+          anchor.utils.bytes.utf8.encode('patient'),
+        ],
+        program.programId
+      );
+    console.log(profileAccountPDA.toBase58())
+//   const accounts = await connection.getProgramAccounts(
 //     program.programId,
 //     {
-    //   filters: [
-    //     {
-    //       memcmp: {
-    //         offset: 8,
-    //         bytes: provider.wallet.publicKey.toBase58(),
-    //       },
-    //     },
-    //   ],
+//       filters: [
+//         {
+//           memcmp: {
+//             offset: 8,
+//             bytes: provider.wallet.publicKey.toBase58(),
+//           },
+//         },
+//       ],
 //     }
 //   );
 //   console.log("accounts", accounts);
-//   let accounts = await program.account.document.all(
-//     {GetProgramAccountsFilter:[
-//             {
-//               memcmp: {
-//                 offset: 8,
-//                 bytes: profileAccountPDA.toBase58(),
-//               },
-//             },
-//           ] }
-//   )
-//   accounts = accounts.map(acc => {
-//     acc.publicKey = acc.publicKey.toString()
-//     acc.account.timestamp = Date(Number(acc.account.timestamp.toString())*1000)
-//     acc.account.profile = acc.account.profile.toString()
-//     return acc;
-//   })
-
-//   console.log(accounts)
-
-  let accounts = await program.account.profile.all({GetProgramAccountsFilter:[
-    {
-      memcmp: {
-        offset: 8,
-        bytes: provider.wallet.publicKey.toBase58(),
-      },
-    },
-  ] })
+  let accounts = await program.account.document.all(
+    [
+            {
+              memcmp: {
+                offset: 8,
+                bytes: profileAccountPDA.toBase58(),
+              },
+            },
+          ] 
+  )
   accounts = accounts.map(acc => {
     acc.publicKey = acc.publicKey.toString()
-    acc.account.authority = acc.account.authority.toString()
+    acc.account.timestamp = Date(Number(acc.account.timestamp.toString())*1000)
+    acc.account.profile = acc.account.profile.toString()
     return acc;
   })
 
   console.log(accounts)
+
+//   let accounts = await program.account.profile.all([
+//     {
+//       memcmp: {
+//         offset: 8,
+//         bytes: provider.wallet.publicKey.toBase58(),
+//       },
+//     },
+//   ] )
+//   accounts = accounts.map(acc => {
+//     acc.publicKey = acc.publicKey.toString()
+//     acc.account.authority = acc.account.authority.toString()
+//     return acc;
+//   })
+
+//   console.log(accounts)
 };
 
 fetch();
