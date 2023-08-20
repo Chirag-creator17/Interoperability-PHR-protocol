@@ -12,7 +12,7 @@ export const GrantedRequestComponent = () => {
   const name = localStorage.getItem("name");
   const hid = localStorage.getItem("health_id");
   const role = localStorage.getItem("role");
-  const token=localStorage.getItem("auth_token");
+  const token = localStorage.getItem("auth_token");
   const [documents, setDocuments] = useState([]);
   const [doc, setDoc] = useState([]);
   useEffect(() => {
@@ -45,24 +45,23 @@ export const GrantedRequestComponent = () => {
   }
   async function fetchUser() {
     for (let i = 0; i < doc.length; i++) {
-      const profileAccount = doc[i].account.profile;
       const autherized = doc[i].account.authorised;
       try {
-        await fetch("http://localhost:6969/api/profile/fetch/info/address", {
+        await fetch("http://localhost:6969/api/dashboard/fetch/authorised", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "x-access-token": token,
           },
           body: JSON.stringify({
-            profileAccount: profileAccount,
+            wallet: autherized,
           }),
         })
           .then((res) => res.json())
           .then((data) => {
-            let g = data.documents;
+            let g = data.profile;
             g.autherized = autherized;
-            // console.log(g);
+            g.info=JSON.parse(g.info);
             setDocuments((documents) => [...documents, g]);
           });
       } catch (err) {
@@ -80,8 +79,7 @@ export const GrantedRequestComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doc, setDocuments]);
   //revoke acces function
-  const revokeAcess = async (id, profileType, authorisedAccount) => {
-    console.log(id, profileType, authorisedAccount);
+  const revokeAcess = async (authorisedAccount) => {
     try {
       const data = {
         id: hid,
@@ -132,7 +130,6 @@ export const GrantedRequestComponent = () => {
               <th>Document id</th>
               <th>Name</th>
               <th>Description</th>
-              <th>Document</th>
               <th>Revoke </th>
             </tr>
           </thead>
@@ -140,19 +137,10 @@ export const GrantedRequestComponent = () => {
             {documents.map((document) => (
               <tr key={document.id}>
                 <td>{document.id}</td>
-                <td>{document.data}</td>
+                <td>{document.info.name}</td>
                 <td>{document.profileType}</td>
-                <td>{document.profileUri}</td>
                 <td>
-                  <Button
-                    onClick={() =>
-                      revokeAcess(
-                        document.id,
-                        document.profileType,
-                        document.autherized
-                      )
-                    }
-                  >
+                  <Button onClick={() => revokeAcess(document.autherized)}>
                     Revoke access
                   </Button>
                 </td>
