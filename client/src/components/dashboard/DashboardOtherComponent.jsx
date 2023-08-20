@@ -12,6 +12,7 @@ export const OtherDashComponent = () => {
   const navigate = useNavigate();
   const name = localStorage.getItem("name");
   const hid = localStorage.getItem("health_id");
+  const token=localStorage.getItem("auth_token");
   const [documents, setDocuments] = useState([]);
   const [doc, setDoc] = useState([]);
   useEffect(() => {
@@ -28,6 +29,7 @@ export const OtherDashComponent = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": token,
         },
         body: JSON.stringify(data),
       })
@@ -51,6 +53,7 @@ export const OtherDashComponent = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "x-access-token": token,
           },
           body: JSON.stringify(data),
         })

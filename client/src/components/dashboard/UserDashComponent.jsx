@@ -14,6 +14,7 @@ export const UserDashComponent = () => {
   const name = localStorage.getItem("name");
   const hid = localStorage.getItem("health_id");
   const role = localStorage.getItem("role");
+  const token=localStorage.getItem("auth_token");
   const [documents, setDocuments] = useState([]);
   useEffect(() => {
     if (localStorage.getItem("auth_token") === null) {
@@ -30,6 +31,7 @@ export const UserDashComponent = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": token,
         },
         body: JSON.stringify(data),
       })

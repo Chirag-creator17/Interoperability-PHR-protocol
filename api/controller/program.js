@@ -234,7 +234,6 @@ const updateProfile = async (req, res) => {
 const authorise = async (req, res) => {
   try {
     const id = req.body.id;
-    console.log(req.body);
     const fetchUserRes = await fetchUser(id);
     if (fetchUserRes.status === 400) {
       return res.status(400).send({ msg: fetchUserRes.msg });

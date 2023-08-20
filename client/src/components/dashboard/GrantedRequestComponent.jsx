@@ -12,6 +12,7 @@ export const GrantedRequestComponent = () => {
   const name = localStorage.getItem("name");
   const hid = localStorage.getItem("health_id");
   const role = localStorage.getItem("role");
+  const token=localStorage.getItem("auth_token");
   const [documents, setDocuments] = useState([]);
   const [doc, setDoc] = useState([]);
   useEffect(() => {
@@ -29,12 +30,13 @@ export const GrantedRequestComponent = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": token,
         },
         body: JSON.stringify(data),
       })
         .then((res) => res.json())
         .then((data) => {
-          // console.log(data.authority);
+          console.log(data.authority);
           setDoc(data.authority);
         });
     } catch (err) {
@@ -50,6 +52,7 @@ export const GrantedRequestComponent = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "x-access-token": token,
           },
           body: JSON.stringify({
             profileAccount: profileAccount,
@@ -89,6 +92,7 @@ export const GrantedRequestComponent = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": token,
         },
         body: JSON.stringify(data),
       })

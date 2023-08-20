@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
 export const UserRecordsComponent = () => {
   //get id from url
   const location = useLocation();
+  const token = localStorage.getItem("auth_token");
   const hid = location.pathname.split("/")[3];
   const [documents, setDocuments] = useState([]);
   async function fetchData() {
@@ -19,6 +19,7 @@ export const UserRecordsComponent = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": token,
         },
         body: JSON.stringify(data),
       })

@@ -10,12 +10,14 @@ export const GrantRequestComponent = () => {
   const [documents, setDocuments] = useState([]);
   const role = localStorage.getItem("role");
   const hid = localStorage.getItem("health_id");
+  const token = localStorage.getItem("auth_token");
   async function fetchData() {
     try {
       await fetch("http://localhost:6969/api/dashboard/others", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": token,
         },
       })
         .then((res) => res.json())
@@ -39,6 +41,7 @@ export const GrantRequestComponent = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": token,
         },
         body: JSON.stringify({
           id: hid,

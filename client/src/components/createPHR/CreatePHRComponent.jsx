@@ -9,6 +9,7 @@ import "./styles.css";
 export const CreateDocumentComp = () => {
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
+  const token = localStorage.getItem("auth_token");
   const [hid, setHid] = useState("");
   const data = localStorage.getItem("name");
   const [desc, setDesc] = useState("");
@@ -42,13 +43,21 @@ export const CreateDocumentComp = () => {
     e.preventDefault();
     const uri = await sendFileToIPFS(fileImg);
     console.log(uri);
-    const res = await axios.post("http://localhost:6969/api/document/create", {
-      id: hid,
-      profileType: "patient",
-      uri: uri,
-      data: data,
-      description: desc,
-    });
+    const res = await axios.post(
+      "http://localhost:6969/api/document/create",
+      {
+        id: hid,
+        profileType: "patient",
+        uri: uri,
+        data: data,
+        description: desc,
+      },
+      {
+        headers: {
+          "x-access-token": token,
+        },
+      }
+    );
     if (res.status === 202) {
       if (role === "patient") navigate("/dashboard");
       else navigate("/dashboardOther");

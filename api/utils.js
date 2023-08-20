@@ -110,7 +110,11 @@ const loginOtp = async (req, res) => {
     };
     user_data.id = dummyData.mobileLinkedHid.healthIdNumber;
     const createUserUrl = "http://localhost:6969/api/profile/create";
-    const user_response = await axios.post(createUserUrl, user_data);
+    const user_response = await axios.post(createUserUrl, user_data, {
+      headers: {
+        "x-access-token": token,
+      },
+    });
     if (user_response.status === 202 || user_response.status === 200) {
       return res.status(200).json(dummyData);
     }
