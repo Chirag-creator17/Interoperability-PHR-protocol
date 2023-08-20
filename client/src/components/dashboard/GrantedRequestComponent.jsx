@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import "./styles.css";
-
-export const OtherDashComponent = () => {
+export const GrantedRequestComponent = () => {
   const navigate = useNavigate();
   const name = localStorage.getItem("name");
   const hid = localStorage.getItem("health_id");
@@ -23,8 +23,9 @@ export const OtherDashComponent = () => {
     try {
       const data = {
         id: hid,
+        profileType: role,
       };
-      await fetch("http://localhost:6969/api/authority/fetch/onAuthority", {
+      await fetch("http://localhost:6969/api/authority/fetch/onProfile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,6 +34,7 @@ export const OtherDashComponent = () => {
       })
         .then((res) => res.json())
         .then((data) => {
+          // console.log(data.authority);
           setDoc(data.authority);
         });
     } catch (err) {
@@ -40,29 +42,30 @@ export const OtherDashComponent = () => {
     }
   }
   async function fetchUser() {
-    try {
-      for (let i = 0; i < doc.length; i++) {
-        const profile = doc[i].account.profile;
-        console.log(profile);
-        const data = {
-          profileAccount: profile,
-        };
+    for (let i = 0; i < doc.length; i++) {
+      const profileAccount = doc[i].account.profile;
+      const autherized = doc[i].account.authorised;
+      let datas = [];
+      try {
         await fetch("http://localhost:6969/api/profile/fetch/info/address", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            profileAccount: profileAccount,
+          }),
         })
           .then((res) => res.json())
           .then((data) => {
             let g = data.documents;
-            g.info=JSON.parse(g.info);
+            g.autherized = autherized;
+            // console.log(g);
             setDocuments((documents) => [...documents, g]);
           });
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
     }
   }
   useEffect(() => {
@@ -74,6 +77,35 @@ export const OtherDashComponent = () => {
     fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doc, setDocuments]);
+  //revoke acces function
+  const revokeAcess = async (id, profileType, authorisedAccount) => {
+    console.log(id, profileType, authorisedAccount);
+    try {
+      const data = {
+        id: hid,
+        profileType: role,
+        authorisedAccount: authorisedAccount,
+      };
+      await fetch("http://localhost:6969/api/authority/revoke", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === 400) {
+            alert("not Access revoked");
+          } else {
+            navigate("/dashboard");
+          }
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Container>
       <Row>
@@ -84,9 +116,9 @@ export const OtherDashComponent = () => {
         <Col style={{ textAlign: "end" }}>
           <Button
             className="route-button"
-            onClick={() => navigate("/createPHR")}
+            onClick={() => navigate("/dashboard")}
           >
-            Create PHR
+            Go to Dashboard
           </Button>
         </Col>
       </Row>
@@ -96,17 +128,31 @@ export const OtherDashComponent = () => {
             <tr>
               <th>Document id</th>
               <th>Name</th>
-              <th>Phone</th>
+              <th>Description</th>
               <th>Document</th>
+              <th>Revoke </th>
             </tr>
           </thead>
           <tbody>
             {documents.map((document) => (
               <tr key={document.id}>
                 <td>{document.id}</td>
-                <td>{document.info.name}</td>
-                <td>{document.info.phone}</td>
                 <td>{document.data}</td>
+                <td>{document.profileType}</td>
+                <td>{document.profileUri}</td>
+                <td>
+                  <Button
+                    onClick={() =>
+                      revokeAcess(
+                        document.id,
+                        document.profileType,
+                        document.autherized
+                      )
+                    }
+                  >
+                    Revoke access
+                  </Button>
+                </td>
               </tr>
             ))}
           </tbody>

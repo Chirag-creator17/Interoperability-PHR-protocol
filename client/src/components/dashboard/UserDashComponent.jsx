@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
-import Button from "react-bootstrap/Button";
 import "./styles.css";
 
 export const UserDashComponent = () => {
@@ -33,7 +34,6 @@ export const UserDashComponent = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data.documents);
           setDocuments(data.documents);
         });
     } catch (err) {
@@ -48,17 +48,15 @@ export const UserDashComponent = () => {
   return (
     <Container>
       <Row>
-        <Col md={6}>
+        <Col>
           <div className="user-name">{name}</div>
           <div className="abha">{hid}</div>
         </Col>
-        <Col md={6} style={{ textAlign: "end" }}>
-          <Button
-            className="route-button"
-            onClick={() => navigate("/activeRequest")}
-          >
-            Active requests
-          </Button>
+        <Col style={{ textAlign: "end" }}>
+          <DropdownButton id="dropdown-basic-button" title="Options" className="route-button">
+            <Dropdown.Item onClick={() => navigate("/grantRequest")}>Grant requests</Dropdown.Item>
+            <Dropdown.Item onClick={() => navigate("/grantedRequest")}>Granted requests</Dropdown.Item>
+          </DropdownButton>
         </Col>
       </Row>
       <Row>
@@ -75,11 +73,16 @@ export const UserDashComponent = () => {
           <tbody>
             {documents.map((document) => (
               <tr key={document.publicKey}>
-                <td>{document.publicKey}</td>
+                <td>{`${document.publicKey.substring(
+                  0,
+                  3
+                )}....${document.publicKey.substring(
+                  document.publicKey.length - 2
+                )}`}</td>
                 <td>{document.account.data}</td>
-                <td>{document.account.timestamp}</td>
+                <td>{new Date(document.account.timestamp).toLocaleString()}</td>
                 <td>{document.account.description}</td>
-                <td>{<document className="account uri"></document> }</td>
+                <td>{document.account.uri}</td>
               </tr>
             ))}
           </tbody>

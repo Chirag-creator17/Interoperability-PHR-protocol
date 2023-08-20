@@ -23,7 +23,6 @@ export const CreateDocumentComp = () => {
       description: desc,
     });
     if (res.status === 202) {
-      alert("Document created");
       if (role === "patient") navigate("/dashboard");
       else navigate("/dashboardOther");
     } else {

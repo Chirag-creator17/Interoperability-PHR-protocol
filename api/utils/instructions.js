@@ -131,7 +131,8 @@ const createAuthorityInstruction = async (id, profileType, authorisedAccount, ke
     }).rpc()
 
     return {status: 200, trx, authorityAccount: authorityAccountPDA}
-  } catch (error) {
+  } catch (err) {
+    console.log(err);
     return { status: 400, msg: `error in create authority instruction ${err}` };
     
   }
