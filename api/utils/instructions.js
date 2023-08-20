@@ -249,15 +249,16 @@ const fetchDocumentRPC = async (id, profileType) => {
         },
       ],
     );
-
+    // console.log(accounts)
     accounts = accounts.map((acc) => {
       acc.publicKey = acc.publicKey.toString();
-      acc.account.timestamp = Date(
-        Number(acc.account.timestamp.toString()) * 1000
-      );
+      acc.account.timestamp = new Date(
+        parseInt(acc.account.timestamp)*1000
+      ).toString();
       acc.account.profile = acc.account.profile.toString();
       return acc;
     });
+
     return { status: 200, accounts };
   } catch (err) {
     return { status: 400, msg: `error in fetching document ${err}` };
