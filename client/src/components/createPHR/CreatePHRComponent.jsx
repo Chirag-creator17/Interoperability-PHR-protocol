@@ -12,13 +12,42 @@ export const CreateDocumentComp = () => {
   const [hid, setHid] = useState("");
   const data = localStorage.getItem("name");
   const [desc, setDesc] = useState("");
+  const [fileImg, setFileImg] = useState(null);
   const [uri, setUri] = useState("");
+  const sendFileToIPFS = async (fileImg) => {
+    if (fileImg) {
+      try {
+        const formData = new FormData();
+        formData.append("file", fileImg);
+
+        const resFile = await axios({
+          method: "post",
+          url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
+          data: formData,
+          headers: {
+            pinata_api_key: `${process.env.REACT_APP_PINATA_API_KEY}`,
+            pinata_secret_api_key: `${process.env.REACT_APP_PINATA_API_SECRET}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        const ImgHash = `https://lime-petite-dragonfly-584.mypinata.cloud/ipfs/${resFile.data.IpfsHash}`;
+        return ImgHash;
+      } catch (error) {
+        console.log("Error sending File to IPFS: ");
+        console.log(error);
+      }
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const uri = await sendFileToIPFS(fileImg);
+    setUri(uri);
+    console.log(uri);
     const res = await axios.post("http://localhost:6969/api/document/create", {
       id: hid,
       profileType: "patient",
-      uri: "",
+      uri: uri,
       data: data,
       description: desc,
     });
@@ -54,13 +83,12 @@ export const CreateDocumentComp = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3 ctrl">
-          <Form.Label>URI</Form.Label>
-          <Form.Control
-            className="inputs"
-            type="text"
-            placeholder="Enter uri of report"
-            value={uri}
-            onChange={(e) => setUri(e.target.value)}
+          <Form.Label>Upload pdf</Form.Label>
+          <br />
+          <input
+            type="file"
+            onChange={(e) => setFileImg(e.target.files[0])}
+            required
           />
         </Form.Group>
         <Button variant="primary" type="submit" onClick={handleSubmit}>

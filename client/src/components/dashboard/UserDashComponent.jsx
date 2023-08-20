@@ -6,6 +6,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
+import Button from "react-bootstrap/Button";
 import "./styles.css";
 
 export const UserDashComponent = () => {
@@ -53,9 +54,17 @@ export const UserDashComponent = () => {
           <div className="abha">{hid}</div>
         </Col>
         <Col style={{ textAlign: "end" }}>
-          <DropdownButton id="dropdown-basic-button" title="Options" className="route-button">
-            <Dropdown.Item onClick={() => navigate("/grantRequest")}>Grant requests</Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate("/grantedRequest")}>Granted requests</Dropdown.Item>
+          <DropdownButton
+            id="dropdown-basic-button"
+            title="Options"
+            className="route-button"
+          >
+            <Dropdown.Item onClick={() => navigate("/grantRequest")}>
+              Grant requests
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => navigate("/grantedRequest")}>
+              Granted requests
+            </Dropdown.Item>
           </DropdownButton>
         </Col>
       </Row>
@@ -80,13 +89,22 @@ export const UserDashComponent = () => {
                   document.publicKey.length - 2
                 )}`}</td>
                 <td>{document.account.data}</td>
-                <td>{new Date(document.account.timestamp).toLocaleString()}</td>
+                <td>{document.account.timestamp}</td>
                 <td>{document.account.description}</td>
-                <td>{document.account.uri}</td>
+                <td>
+                  <a href={document.account.uri} target="_blank">
+                    Open PDF
+                  </a>
+                </td>
               </tr>
             ))}
           </tbody>
         </Table>
+      </Row>
+      <Row>
+        <Button onClick={() => navigate("/createPHR")}>
+          Create PHR
+        </Button>
       </Row>
     </Container>
   );
