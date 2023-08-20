@@ -28,6 +28,8 @@ const insertUser = async (id, name, profileType, publicKey,secretKey, phone ) =>
     }
 }
 
+
+
 const fetchUser = async (id) => {
     let pool, client;
     try {
@@ -45,8 +47,26 @@ const fetchUser = async (id) => {
     }
 }
 
+const fetchUserFromWallet = async (wallet) => {
+    let pool, client;
+    try {
+        pool = getDBPool(1)
+        client = await pool.connect()
+
+        const query = `SELECT * FROM users WHERE public_key = $1`
+        const {rows} = await client.query(query, [wallet]);
+        return {status: 200, msg:"success", res: rows}
+    } catch (err) {
+        return {status: 400, msg: `error in fetch user ${err}`}
+    } finally {
+        await client.release()
+        await pool.end()
+    }
+}
+
 module.exports = {
     getDBPool,
     insertUser,
-    fetchUser
+    fetchUser,
+    fetchUserFromWallet
 }
