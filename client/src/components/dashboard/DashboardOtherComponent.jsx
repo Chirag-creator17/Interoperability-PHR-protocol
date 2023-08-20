@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -11,7 +12,6 @@ export const OtherDashComponent = () => {
   const navigate = useNavigate();
   const name = localStorage.getItem("name");
   const hid = localStorage.getItem("health_id");
-  const role = localStorage.getItem("role");
   const [documents, setDocuments] = useState([]);
   const [doc, setDoc] = useState([]);
   useEffect(() => {
@@ -57,7 +57,7 @@ export const OtherDashComponent = () => {
           .then((res) => res.json())
           .then((data) => {
             let g = data.documents;
-            g.info=JSON.parse(g.info);
+            g.info = JSON.parse(g.info);
             setDocuments((documents) => [...documents, g]);
           });
       }
@@ -94,10 +94,10 @@ export const OtherDashComponent = () => {
         <Table>
           <thead>
             <tr>
-              <th>Document id</th>
+              <th>User id</th>
               <th>Name</th>
               <th>Phone</th>
-              <th>Document</th>
+              <th>Documents</th>
             </tr>
           </thead>
           <tbody>
@@ -106,7 +106,13 @@ export const OtherDashComponent = () => {
                 <td>{document.id}</td>
                 <td>{document.info.name}</td>
                 <td>{document.info.phone}</td>
-                <td>{document.data}</td>
+                <td>
+                  <Link
+                    to={`./userRecords/${document.id}`}
+                  >
+                    Open
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>

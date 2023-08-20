@@ -1,30 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
+import { useLocation } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
-import Button from "react-bootstrap/Button";
-import "./styles.css";
-
-export const UserDashComponent = () => {
-  const navigate = useNavigate();
-  const name = localStorage.getItem("name");
-  const hid = localStorage.getItem("health_id");
-  const role = localStorage.getItem("role");
+export const UserRecordsComponent = () => {
+  //get id from url
+  const location = useLocation();
+  const hid = location.pathname.split("/")[3];
   const [documents, setDocuments] = useState([]);
-  useEffect(() => {
-    if (localStorage.getItem("auth_token") === null) {
-      navigate("/");
-    }
-  }, [navigate]);
   async function fetchData() {
     try {
       const data = {
         id: hid,
-        profileType: role,
+        profileType: "patient",
       };
       await fetch("http://localhost:6969/api/document/fetch", {
         method: "POST",
@@ -45,29 +34,8 @@ export const UserDashComponent = () => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return (
     <Container>
-      <Row>
-        <Col>
-          <div className="user-name">{name}</div>
-          <div className="abha">{hid}</div>
-        </Col>
-        <Col style={{ textAlign: "end" }}>
-          <DropdownButton
-            id="dropdown-basic-button"
-            title="Options"
-            className="route-button"
-          >
-            <Dropdown.Item onClick={() => navigate("/grantRequest")}>
-              Grant requests
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate("/grantedRequest")}>
-              Granted requests
-            </Dropdown.Item>
-          </DropdownButton>
-        </Col>
-      </Row>
       <Row>
         <Table>
           <thead>
@@ -92,7 +60,11 @@ export const UserDashComponent = () => {
                 <td>{new Date(document.account.timestamp).toLocaleString()}</td>
                 <td>{document.account.description}</td>
                 <td>
-                  <a href={document.account.uri} target="_blank" rel="noreferrer">
+                  <a
+                    href={document.account.uri}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     Open PDF
                   </a>
                 </td>
@@ -100,11 +72,6 @@ export const UserDashComponent = () => {
             ))}
           </tbody>
         </Table>
-      </Row>
-      <Row>
-        <Button onClick={() => navigate("/createPHR")}>
-          Create PHR
-        </Button>
       </Row>
     </Container>
   );

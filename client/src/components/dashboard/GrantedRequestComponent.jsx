@@ -45,7 +45,6 @@ export const GrantedRequestComponent = () => {
     for (let i = 0; i < doc.length; i++) {
       const profileAccount = doc[i].account.profile;
       const autherized = doc[i].account.authorised;
-      let datas = [];
       try {
         await fetch("http://localhost:6969/api/profile/fetch/info/address", {
           method: "POST",

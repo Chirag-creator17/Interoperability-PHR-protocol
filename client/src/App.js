@@ -8,7 +8,8 @@ import { GrantedRequestComponent } from "./components/dashboard/GrantedRequestCo
 import { GrantRequestComponent } from "./components/dashboard/GrantRequestComponent";
 import { LoginOtherComponent } from "./components/login/LoginOtherComponent";
 import { OtherDashComponent } from "./components/dashboard/DashboardOtherComponent";
-import {CreateDocumentComp} from "./components/createPHR/CreatePHRComponent.jsx";
+import { CreateDocumentComp } from "./components/createPHR/CreatePHRComponent.jsx";
+import { UserRecordsComponent } from "./components/dashboard/UserRecords";
 export default function App() {
   return (
     <div>
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/grantRequest" element={<GrantRequestComponent />} />
           <Route path="/loginOther" element={<LoginOtherComponent />} />
           <Route path="/createPHR" element={<CreateDocumentComp />} />
+          <Route path="/dashboardOther/userRecords/:id" element={<UserRecordsComponent />} />
         </Routes>
       </Router>
     </div>

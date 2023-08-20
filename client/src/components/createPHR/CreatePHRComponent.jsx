@@ -13,7 +13,6 @@ export const CreateDocumentComp = () => {
   const data = localStorage.getItem("name");
   const [desc, setDesc] = useState("");
   const [fileImg, setFileImg] = useState(null);
-  const [uri, setUri] = useState("");
   const sendFileToIPFS = async (fileImg) => {
     if (fileImg) {
       try {
@@ -42,7 +41,6 @@ export const CreateDocumentComp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const uri = await sendFileToIPFS(fileImg);
-    setUri(uri);
     console.log(uri);
     const res = await axios.post("http://localhost:6969/api/document/create", {
       id: hid,
