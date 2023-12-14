@@ -13,8 +13,8 @@ import { UserRecordsComponent } from "./components/dashboard/UserRecords";
 export default function App() {
   return (
     <div>
-      <HeaderComponent/>
       <Router>
+      <HeaderComponent/>
         <Routes>
           <Route path="/" element={<LoginComponent />} />
           <Route path="/otp" element={<OtpInputComponent />} />
